@@ -9,8 +9,8 @@ LICENSE = "MPLv1 | GPLv2+ | LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://toolkit/content/license.html;endline=39;md5=f7e14664a6dca6a06efe93d70f711c0e"
 
 SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox-${PV}.source.tar.bz2;name=archive \
-           file://mozilla-firefox.png \
-           file://mozilla-firefox.desktop \
+           file://b2g.png \
+           file://b2g.desktop \
            file://vendor.js \
            file://fix-python-path.patch \
            file://prefs/Don-t-auto-disable-extensions-in-system-directories.patch \
@@ -66,8 +66,8 @@ do_install_append() {
     install -d ${D}${datadir}/applications
     install -d ${D}${datadir}/pixmaps
 
-    install -m 0644 ${WORKDIR}/mozilla-firefox.desktop ${D}${datadir}/applications/
-    install -m 0644 ${WORKDIR}/mozilla-firefox.png ${D}${datadir}/pixmaps/
+    install -m 0644 ${WORKDIR}/b2g.desktop ${D}${datadir}/applications/
+    install -m 0644 ${WORKDIR}/b2g.png ${D}${datadir}/pixmaps/
     install -m 0644 ${WORKDIR}/vendor.js ${D}${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/defaults/pref/
 
     # Fix ownership of files
