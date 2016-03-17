@@ -58,39 +58,28 @@ MOZ_APP_BASE_VERSION = "38.6"
 
 inherit mozilla
 
+PACKAGES = "${PN} ${PN}-dbg"
+
 EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 
 ARM_INSTRUCTION_SET = "arm"
 
-do_install_append() {
+do_install() {
+    # WIP
+    oe_runmake -f client.mk package
     install -d ${D}${datadir}/applications
     install -d ${D}${datadir}/pixmaps
-
+    install -d ${D}${libdir}
     install -m 0644 ${WORKDIR}/b2g.desktop ${D}${datadir}/applications/
     install -m 0644 ${WORKDIR}/b2g.png ${D}${datadir}/pixmaps/
-    install -m 0644 ${WORKDIR}/vendor.js ${D}${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/defaults/pref/
-
-    # Fix ownership of files
-    chown root:root -R ${D}${datadir}
-    chown root:root -R ${D}${libdir}
+    tar xvfj ${MOZ_OBJDIR}/dist/${PN}-38.0.en-US.linux-gnueabi-arm.tar.bz2 -C ${D}${libdir}
 }
 
-FILES_${PN} = "${bindir}/${PN} \
-               ${datadir}/applications/ \
+FILES_${PN} = "${datadir}/applications/ \
                ${datadir}/pixmaps/ \
-               ${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/* \
-               ${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/.autoreg \
-               ${bindir}/defaults"
-FILES_${PN}-dev += "${datadir}/idl ${bindir}/${PN}-config ${libdir}/${PN}-devel-*"
-FILES_${PN}-staticdev += "${libdir}/${PN}-devel-*/sdk/lib/*.a"
-FILES_${PN}-dbg += "${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/.debug \
-                    ${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/*/.debug \
-                    ${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/*/*/.debug \
-                    ${libdir}/${PN}-${MOZ_APP_BASE_VERSION}/*/*/*/.debug \
-                    ${libdir}/${PN}-devel-*/*/.debug \
-                    ${libdir}/${PN}-devel-*/*/*/.debug \
-                    ${libdir}/${PN}-devel-*/*/*/*/.debug \
-                    ${bindir}/.debug"
+               ${libdir}/${PN}/*"
+FILES_${PN}-dbg += "${libdir}/${PN}/.debug \
+                    ${libdir}/${PN}/*/.debug"
 
 # We don't build XUL as system shared lib, so we can mark all libs as private
 PRIVATE_LIBS = "libmozjs.so \
