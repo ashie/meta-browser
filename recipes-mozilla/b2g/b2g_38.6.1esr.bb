@@ -58,7 +58,7 @@ MOZ_APP_BASE_VERSION = "38.6"
 
 inherit mozilla
 
-PACKAGES = "${PN} ${PN}-dbg"
+PACKAGES = "${PN}-dbg ${PN}"
 
 EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 
