@@ -76,7 +76,7 @@ do_install() {
 
 FILES_${PN} = "${datadir}/applications/ \
                ${datadir}/pixmaps/ \
-               ${libdir}/${PN}/*"
+               ${libdir}/${PN}/"
 FILES_${PN}-dbg += "${libdir}/${PN}/.debug \
                     ${libdir}/${PN}/*/.debug"
 
