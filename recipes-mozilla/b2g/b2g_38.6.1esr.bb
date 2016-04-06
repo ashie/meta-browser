@@ -65,7 +65,6 @@ EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 ARM_INSTRUCTION_SET = "arm"
 
 do_install() {
-    # WIP
     oe_runmake -f client.mk package
     install -d ${D}${datadir}/applications
     install -d ${D}${datadir}/pixmaps
