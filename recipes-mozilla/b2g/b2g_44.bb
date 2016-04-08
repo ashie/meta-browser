@@ -10,7 +10,6 @@ LICENSE = "MPLv2 | GPLv2+ | LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://toolkit/content/license.html;endline=39;md5=f7e14664a6dca6a06efe93d70f711c0e"
 
 SRCREV = "df9367456ebfe9ed1ce3501886416e2046029f52"
-PV = "44+git${SRCPV}"
 SRC_URI = "git://github.com/mozilla/gecko-dev.git;branch=b2g44_v2_5 \
            file://fix-python-path.patch \
            "
