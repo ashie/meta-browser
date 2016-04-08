@@ -22,8 +22,6 @@ inherit mozilla
 
 PACKAGES = "${PN}-dbg ${PN}"
 
-EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
-
 ARM_INSTRUCTION_SET = "arm"
 
 do_install() {
