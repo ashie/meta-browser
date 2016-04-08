@@ -4,13 +4,12 @@ DEPENDS = "b2g"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7eca70cd144bd72119f935f821f4f922"
 
-SRC_URI = "https://github.com/mozilla-b2g/gaia/archive/B2G_2_5_20160125_MERGEDAY.tar.gz \
+SRCREV = "095ece02e568eea316e7ee828f34da748066e6c9"
+SRC_URI = "git://github.com/mozilla-b2g/gaia.git;branch=v2.5 \
            file://b2g.png \
            file://b2g.desktop \
            file://b2g.sh \
            "
-SRC_URI[md5sum] = "a270c5955f569e26f050d0aade3246c0"
-SRC_URI[sha256sum] = "26f499b9229c4373bafde504f57093bc50ab524a62cf76043dc79ac3073dd1e5"
 
 PACKAGES = "${PN}"
 
@@ -20,7 +19,7 @@ export NOFTU = "1"
 export NO_LOCK_SCREEN = "1"
 export GAIA_DEVICE_TYPE = "phone"
 
-S = "${WORKDIR}/${PN}-B2G_2_5_20160125_MERGEDAY"
+S = "${WORKDIR}/git"
 
 GAIA_COREAPPSDIR_PREF = "user_pref('b2g.coreappsdir', \"${libdir}/${PN}\");"
 
