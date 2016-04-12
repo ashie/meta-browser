@@ -2,13 +2,15 @@
 
 set -e
 
-B2G_PATH=/usr/lib/b2g/b2g
-PROFILE_BASE_DIR=${HOME}/.mozilla/b2g
+B2G_PATH="/usr/lib/b2g/b2g"
+PROFILE_PACKAGE_PATH="/usr/share/gaia/profile.tar.gz"
+PROFILE_BASE_DIR="${HOME}/.mozilla/b2g"
+PROFILE_DIR="${PROFILE_BASE_DIR}/profile"
 
-if [ ! -d "${PROFILE_BASE_DIR}" ]; then
+if [ ! -d "${PROFILE_DIR}" ]; then
     echo "Initializing the b2g profile..."
-    mkdir -p ${PROFILE_BASE_DIR}
-    tar xf /usr/share/b2g/profile.tar.gz -C ${PROFILE_BASE_DIR}
+    mkdir -p "${PROFILE_BASE_DIR}"
+    tar xf "${PROFILE_PACKAGE_PATH}" -C "${PROFILE_BASE_DIR}"
 fi
 
-${B2G_PATH} -profile ${PROFILE_BASE_DIR}/profile $@
+"${B2G_PATH}" -profile "${PROFILE_DIR}" $@
