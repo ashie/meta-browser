@@ -33,7 +33,7 @@ do_compile() {
 do_install() {
     install -d ${D}${libdir}/${PN}
     install -d ${D}${datadir}/${PN}
-    tar cvfz profile.tar.gz ${S}/profile --exclude webapps
+    tar cvfz profile.tar.gz profile --exclude webapps -C ${S}
     cp -r ${S}/profile/webapps ${D}${libdir}/${PN}
     install -m 0644 ${S}/profile.tar.gz ${D}${datadir}/${PN}
 
