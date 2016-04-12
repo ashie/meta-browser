@@ -13,4 +13,4 @@ if [ ! -d "${PROFILE_DIR}" ]; then
     tar xf "${PROFILE_PACKAGE_PATH}" -C "${PROFILE_BASE_DIR}"
 fi
 
-"${B2G_PATH}" -profile "${PROFILE_DIR}" $@
+"${B2G_PATH}" -profile "${PROFILE_DIR}" --screen=full $@
