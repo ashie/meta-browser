@@ -3,7 +3,7 @@
 #   Released under the MIT license (see packages/COPYING)
 
 DESCRIPTION ?= "Boot to Gecko aims to create a complete, standalone operating system for the open web."
-DEPENDS += "alsa-lib curl startup-notification libevent cairo libnotify libvpx \
+DEPENDS += "alsa-lib curl startup-notification libevent cairo libnotify \
             virtual/libgl nss nspr pulseaudio yasm-native icu"
 
 LICENSE = "MPLv2 | GPLv2+ | LGPLv2.1+"
