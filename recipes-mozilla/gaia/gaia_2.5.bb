@@ -1,6 +1,6 @@
 SUMMARY = "HTML5-based Phone UI for the Boot 2 Gecko Project"
 LICENSE = "Apache-2.0"
-DEPENDS = "b2g"
+RDEPENDS_${PN} = "b2g"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7eca70cd144bd72119f935f821f4f922"
 
