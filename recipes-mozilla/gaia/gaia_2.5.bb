@@ -15,9 +15,10 @@ PACKAGES = "${PN}"
 
 EXTRA_OEMAKE += "SHELL=/bin/sh"
 
+export GAIA_DEVICE_TYPE = "phone"
 export NOFTU = "1"
 export NO_LOCK_SCREEN = "1"
-export GAIA_DEVICE_TYPE = "phone"
+export SCREEN_TIMEOUT = "0"
 
 S = "${WORKDIR}/git"
 
