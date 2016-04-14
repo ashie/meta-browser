@@ -1,11 +1,11 @@
 From 269e29571bc259d8e092ae2583c42a2b0377332b Mon Sep 17 00:00:00 2001
-From: Takuro Ashie <ashie@clear-code.com>
+From: Takuro Ashie <ashie@homa.ne.jp>
 Date: Fri, 8 Apr 2016 15:37:31 +0900
 Subject: [PATCH] Fix python path
 
 config.status doesn't work on some build system such as Yocto due
 to the limit of shebang length. Althought the max length of shebang
-is 128 on Linux, Yocto generates a longer one than it.
+is 128 on Linux, such build systems generate a longer one than it.
 
 To avoid it, use host's python instead.
 ---
