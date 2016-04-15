@@ -2,7 +2,7 @@
 # Released under the MIT license (see packages/COPYING)
 
 DESCRIPTION ?= "Browser made by mozilla"
-DEPENDS += "alsa-lib curl startup-notification libevent cairo libnotify libvpx \
+DEPENDS += "alsa-lib curl startup-notification libevent cairo libnotify \
             virtual/libgl nss nspr pulseaudio yasm-native icu"
 
 LICENSE = "MPLv2 | GPLv2+ | LGPLv2.1+"
@@ -13,6 +13,7 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://mozilla-firefox.desktop \
            file://vendor.js \
            file://fix-python-path.patch \
+           file://mozconfig-45esr \
            "
 
 SRC_URI[archive.md5sum] = "396ed2538d6855a03c316940ecc0d239"
@@ -23,6 +24,8 @@ S = "${WORKDIR}/firefox-45.0esr"
 MOZ_APP_BASE_VERSION = "45.0"
 
 inherit mozilla
+
+export MOZCONFIG = "${WORKDIR}/mozconfig-45esr"
 
 EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 
