@@ -14,6 +14,7 @@ SRC_URI = "git://github.com/mozilla/gecko-dev.git;branch=b2g44_v2_5 \
            file://fix-python-path.patch \
            file://0001-Fix-a-broken-build-option-with-gl-provider.patch \
            file://0002-Fix-a-build-error-on-enabling-both-Gtk-2-and-EGL.patch \
+           file://vendor.js \
            "
 
 MOZ_APP_BASE_VERSION = "44.0"
@@ -30,6 +31,7 @@ do_install() {
     oe_runmake -f client.mk package
     install -d ${D}${libdir}
     tar xvfj ${MOZ_OBJDIR}/dist/${PN}-${MOZ_APP_BASE_VERSION}.en-US.linux-gnueabi-arm.tar.bz2 -C ${D}${libdir}
+    install -m 0644 ${WORKDIR}/vendor.js ${D}${libdir}/${PN}/defaults/pref/
 }
 
 FILES_${PN} = "${libdir}/${PN}/"
