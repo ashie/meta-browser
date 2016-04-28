@@ -1,3 +1,4 @@
+pref("layers.acceleration.force-enabled", true);
 pref("general.useragent.compatMode.firefox", true);
 pref("distribution.searchplugins.defaultLocale", "en-US");
 // Forbid application updates
