@@ -1,0 +1,39 @@
+From 22f2d8969ff65e49318821a83a5acd1f691a47d7 Mon Sep 17 00:00:00 2001
+From: Martin Stransky <stransky@anakreon.cz>
+Date: Mon, 7 Sep 2015 11:34:45 +0200
+Subject: [PATCH 5/8] Fixed nsWindow::GetLastUserInputTime()
+
+Signed-off-by: Takuro Ashie <ashie@homa.ne.jp>
+---
+ widget/gtk/nsWindow.cpp | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/widget/gtk/nsWindow.cpp b/widget/gtk/nsWindow.cpp
+index 082d09d..d53b308c 100644
+--- a/widget/gtk/nsWindow.cpp
++++ b/widget/gtk/nsWindow.cpp
+@@ -1386,6 +1386,10 @@ nsWindow::GetLastUserInputTime()
+     // drags, WM_DELETE_WINDOW delete events, but not usually mouse motion nor
+     // button and key releases.  Therefore use the most recent of
+     // gdk_x11_display_get_user_time and the last time that we have seen.
++    GdkDisplay *display = gdk_display_get_default();
++    if (!GDK_IS_X11_DISPLAY(display))
++        return sLastUserInputTime;
++
+     guint32 timestamp =
+             gdk_x11_display_get_user_time(gdk_display_get_default());
+     if (sLastUserInputTime != GDK_CURRENT_TIME &&
+@@ -1966,9 +1970,8 @@ nsWindow::HasPendingInputEvent()
+     bool haveEvent = false;
+ #ifdef MOZ_X11
+     XEvent ev;
+-    GdkDisplay* gdkDisplay = gdk_display_get_default();
+     if (mIsX11Display) {
+-        Display *display = GDK_DISPLAY_XDISPLAY(gdkDisplay);
++        Display *display = GDK_DISPLAY_XDISPLAY(gdk_display_get_default());
+         haveEvent =
+             XCheckMaskEvent(display,
+                             KeyPressMask | KeyReleaseMask | ButtonPressMask |
+-- 
+1.9.1
+

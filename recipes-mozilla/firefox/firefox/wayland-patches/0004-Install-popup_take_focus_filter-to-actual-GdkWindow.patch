@@ -1,0 +1,37 @@
+From ef614dd6cda2e062c57063cba09f17fc7789a3ce Mon Sep 17 00:00:00 2001
+From: Martin Stransky <stransky@anakreon.cz>
+Date: Mon, 7 Sep 2015 11:33:47 +0200
+Subject: [PATCH 4/8] Install popup_take_focus_filter() to actual GdkWindow
+
+Signed-off-by: Takuro Ashie <ashie@homa.ne.jp>
+---
+ widget/gtk/nsWindow.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/widget/gtk/nsWindow.cpp b/widget/gtk/nsWindow.cpp
+index 3f52d613..082d09d 100644
+--- a/widget/gtk/nsWindow.cpp
++++ b/widget/gtk/nsWindow.cpp
+@@ -3670,8 +3670,6 @@ nsWindow::Create(nsIWidget* aParent,
+                 // ... but when the window manager offers focus through
+                 // WM_TAKE_FOCUS, focus is requested on the parent window.
+                 gtk_widget_realize(mShell);
+-                gdk_window_add_filter(gtk_widget_get_window(mShell),
+-                                      popup_take_focus_filter, nullptr); 
+ #endif
+             }
+ 
+@@ -3745,6 +3743,10 @@ nsWindow::Create(nsIWidget* aParent,
+         // the drawing window
+         mGdkWindow = gtk_widget_get_window(eventWidget);
+ 
++        if (mWindowType == eWindowType_popup && aInitData->mNoAutoHide) {
++            gdk_window_add_filter(mGdkWindow, popup_take_focus_filter, nullptr);
++        }
++
+         if (mWindowType == eWindowType_popup) {
+             // gdk does not automatically set the cursor for "temporary"
+             // windows, which are what gtk uses for popups.
+-- 
+1.9.1
+

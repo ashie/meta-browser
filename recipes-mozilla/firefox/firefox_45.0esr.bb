@@ -15,6 +15,13 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://fix-python-path.patch \
            file://0001-Fix-a-broken-build-option-with-gl-provider.patch \
            file://0002-Fix-a-build-error-on-enabling-both-Gtk-2-and-EGL.patch \
+           file://wayland-patches/0001-Initial-patch-from-https-stransky.fedorapeople.org-f.patch \
+           file://wayland-patches/0002-gdk_x11_get_server_time-fix.patch \
+           file://wayland-patches/0003-Fixed-gdk_x11_get_server_time-for-wayland.patch \
+           file://wayland-patches/0004-Install-popup_take_focus_filter-to-actual-GdkWindow.patch \
+           file://wayland-patches/0005-Fixed-nsWindow-GetLastUserInputTime.patch \
+           file://wayland-patches/0006-Added-.mozconfig-build-file.patch \
+           file://wayland-patches/0007-Updated-Readme.txt-for-build-instructions.patch \
            file://mozconfig-45esr \
            "
 
