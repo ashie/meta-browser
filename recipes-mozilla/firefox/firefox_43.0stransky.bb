@@ -1,29 +1,31 @@
+
 # Copyright (C) 2009-2015, O.S. Systems Software Ltda. All Rights Reserved
 # Released under the MIT license (see packages/COPYING)
 
 DESCRIPTION ?= "Browser made by mozilla"
 DEPENDS += "alsa-lib curl startup-notification libevent cairo libnotify \
-            virtual/libgl nss nspr pulseaudio yasm-native icu"
+            virtual/libgl nspr pulseaudio yasm-native icu"
 
 LICENSE = "MPLv2 | GPLv2+ | LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://toolkit/content/license.html;endline=39;md5=f7e14664a6dca6a06efe93d70f711c0e"
 
-SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox-${PV}.source.tar.xz;name=archive \
+SRCREV = "dfa03a2b9503c9b3779b8f90cb3f80f423a9953b"
+SRC_URI = "git://github.com/stransky/gecko-dev.git \
            file://mozilla-firefox.png \
            file://mozilla-firefox.desktop \
            file://vendor.js \
-           file://fix-python-path.patch \
-           file://0001-Fix-a-broken-build-option-with-gl-provider.patch \
-           file://0002-Fix-a-build-error-on-enabling-both-Gtk-2-and-EGL.patch \
+           file://fix-python-path2.patch \
+           file://fix-no-webrtc.patch \
+           file://bug-1198216-fix.patch \
            file://mozconfig-45esr \
            "
 
-SRC_URI[archive.md5sum] = "396ed2538d6855a03c316940ecc0d239"
-SRC_URI[archive.sha256sum] = "0f46f6c2e6b4f7efea2cd688c27b154a2f000cf5a7e5cb676def8a6dbf3839a0"
+SRC_URI[md5sum] = "655769ddf373f7983e0fe87f14d9d624"
+SRC_URI[sha256sum] = "b82d5c98508b6fa1bee341d5f2c6c14752afaf7d7d10cc1c4e6f9577322f01fa"
 
-S = "${WORKDIR}/firefox-45.0esr"
+S = "${WORKDIR}/git"
 # MOZ_APP_BASE_VERSION should be incremented after a release
-MOZ_APP_BASE_VERSION = "45.0"
+MOZ_APP_BASE_VERSION = "43.0a1"
 
 inherit mozilla
 

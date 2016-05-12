@@ -1,0 +1,234 @@
+# HG changeset patch
+# User Gian-Carlo Pascutto <gcp@mozilla.com>
+# Date 1442311069 -7200
+#      Tue Sep 15 11:57:49 2015 +0200
+# Node ID e32b7253ba0e2358ecd581bd708116f89642e5be
+# Parent  c69e31de9aec2b9e8c0b3128ac6dc3897aa7381f
+Bug 1200477 - Allow building with WebRTC disabled. r=
+
+diff --git a/dom/media/systemservices/ShmemPool.cpp b/dom/media/systemservices/ShmemPool.cpp
+--- a/dom/media/systemservices/ShmemPool.cpp
++++ b/dom/media/systemservices/ShmemPool.cpp
+@@ -6,16 +6,17 @@
+ 
+ #include "mozilla/Assertions.h"
+ #include "mozilla/Logging.h"
+ #include "mozilla/ShmemPool.h"
+ #include "mozilla/Move.h"
+ 
+ #undef LOG
+ #undef LOG_ENABLED
++extern PRLogModuleInfo *gCamerasParentLog;
+ #define LOG(args) MOZ_LOG(gCamerasParentLog, mozilla::LogLevel::Debug, args)
+ #define LOG_ENABLED() MOZ_LOG_TEST(gCamerasParentLog, mozilla::LogLevel::Debug)
+ 
+ namespace mozilla {
+ 
+ ShmemPool::ShmemPool(size_t aPoolSize)
+   : mMutex("mozilla::ShmemPool"),
+     mPoolFree(aPoolSize)
+diff --git a/dom/media/systemservices/moz.build b/dom/media/systemservices/moz.build
+--- a/dom/media/systemservices/moz.build
++++ b/dom/media/systemservices/moz.build
+@@ -1,31 +1,31 @@
+ # -*- Mode: python; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 40 -*-
+ # vim: set filetype=python:
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ if CONFIG['MOZ_WEBRTC']:
+-    EXPORTS += ['CamerasChild.h',
+-                'CamerasParent.h',
+-                'CamerasUtils.h',
+-                'LoadManager.h',
+-                'LoadManagerFactory.h',
+-                'LoadMonitor.h',
++    EXPORTS += [
++        'CamerasChild.h',
++        'CamerasParent.h',
++        'CamerasUtils.h',
++        'LoadManager.h',
++        'LoadManagerFactory.h',
++        'LoadMonitor.h',
+     ]
+-    UNIFIED_SOURCES += ['CamerasChild.cpp',
+-                        'CamerasParent.cpp',
+-                        'CamerasUtils.cpp',
+-                        'LoadManager.cpp',
+-                        'LoadManagerFactory.cpp',
+-                        'LoadMonitor.cpp',
+-    ]
+-    IPDL_SOURCES = [
+-        'PCameras.ipdl',
++    UNIFIED_SOURCES += [
++        'CamerasChild.cpp',
++        'CamerasParent.cpp',
++        'CamerasUtils.cpp',
++        'LoadManager.cpp',
++        'LoadManagerFactory.cpp',
++        'LoadMonitor.cpp',
++        'ShmemPool.cpp',
+     ]
+     LOCAL_INCLUDES += [
+         '/media/webrtc/signaling',
+         '/media/webrtc/trunk',
+     ]
+ 
+ if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('android', 'gonk'):
+     EXPORTS += [
+@@ -58,27 +58,28 @@ EXPORTS.mozilla.media += ['MediaChild.h'
+                           'MediaSystemResourceManager.h',
+                           'MediaSystemResourceManagerChild.h',
+                           'MediaSystemResourceManagerParent.h',
+                           'MediaSystemResourceMessageUtils.h',
+                           'MediaSystemResourceService.h',
+                           'MediaSystemResourceTypes.h',
+                           'MediaUtils.h',
+ ]
+-UNIFIED_SOURCES += ['MediaChild.cpp',
+-                    'MediaParent.cpp',
+-                    'MediaSystemResourceClient.cpp',
+-                    'MediaSystemResourceManager.cpp',
+-                    'MediaSystemResourceManagerChild.cpp',
+-                    'MediaSystemResourceManagerParent.cpp',
+-                    'MediaSystemResourceService.cpp',
+-                    'MediaUtils.cpp',
+-                    'ShmemPool.cpp',
++UNIFIED_SOURCES += [
++    'MediaChild.cpp',
++    'MediaParent.cpp',
++    'MediaSystemResourceClient.cpp',
++    'MediaSystemResourceManager.cpp',
++    'MediaSystemResourceManagerChild.cpp',
++    'MediaSystemResourceManagerParent.cpp',
++    'MediaSystemResourceService.cpp',
++    'MediaUtils.cpp',
+ ]
+ IPDL_SOURCES += [
++    'PCameras.ipdl',
+     'PMedia.ipdl',
+     'PMediaSystemResourceManager.ipdl',
+ ]
+ # /dom/base needed for nsGlobalWindow.h in MediaChild.cpp
+ LOCAL_INCLUDES += [
+     '/dom/base',
+ ]
+ 
+diff --git a/ipc/glue/BackgroundChildImpl.cpp b/ipc/glue/BackgroundChildImpl.cpp
+--- a/ipc/glue/BackgroundChildImpl.cpp
++++ b/ipc/glue/BackgroundChildImpl.cpp
+@@ -3,17 +3,19 @@
+  * You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #include "BackgroundChildImpl.h"
+ 
+ #include "ActorsChild.h" // IndexedDB
+ #include "BroadcastChannelChild.h"
+ #include "ServiceWorkerManagerChild.h"
+ #include "FileDescriptorSetChild.h"
++#ifdef MOZ_WEBRTC
+ #include "CamerasChild.h"
++#endif
+ #include "mozilla/media/MediaChild.h"
+ #include "mozilla/Assertions.h"
+ #include "mozilla/dom/PBlobChild.h"
+ #include "mozilla/dom/asmjscache/AsmJSCache.h"
+ #include "mozilla/dom/cache/ActorUtils.h"
+ #include "mozilla/dom/indexedDB/PBackgroundIDBFactoryChild.h"
+ #include "mozilla/dom/ipc/BlobChild.h"
+ #include "mozilla/dom/MessagePortChild.h"
+@@ -266,27 +268,33 @@ BackgroundChildImpl::DeallocPBroadcastCh
+     dont_AddRef(static_cast<dom::BroadcastChannelChild*>(aActor));
+   MOZ_ASSERT(child);
+   return true;
+ }
+ 
+ camera::PCamerasChild*
+ BackgroundChildImpl::AllocPCamerasChild()
+ {
++#ifdef MOZ_WEBRTC
+   nsRefPtr<camera::CamerasChild> agent =
+     new camera::CamerasChild();
+   return agent.forget().take();
++#else
++  return nullptr;
++#endif
+ }
+ 
+ bool
+ BackgroundChildImpl::DeallocPCamerasChild(camera::PCamerasChild *aActor)
+ {
++#ifdef MOZ_WEBRTC
+   nsRefPtr<camera::CamerasChild> child =
+       dont_AddRef(static_cast<camera::CamerasChild*>(aActor));
+   MOZ_ASSERT(aActor);
++#endif
+   return true;
+ }
+ 
+ // -----------------------------------------------------------------------------
+ // ServiceWorkerManager
+ // -----------------------------------------------------------------------------
+ 
+ dom::PServiceWorkerManagerChild*
+diff --git a/ipc/glue/BackgroundParentImpl.cpp b/ipc/glue/BackgroundParentImpl.cpp
+--- a/ipc/glue/BackgroundParentImpl.cpp
++++ b/ipc/glue/BackgroundParentImpl.cpp
+@@ -1,17 +1,19 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+  * You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #include "BackgroundParentImpl.h"
+ 
+ #include "BroadcastChannelParent.h"
+ #include "FileDescriptorSetParent.h"
++#ifdef MOZ_WEBRTC
+ #include "CamerasParent.h"
++#endif
+ #include "mozilla/media/MediaParent.h"
+ #include "mozilla/AppProcessChecker.h"
+ #include "mozilla/Assertions.h"
+ #include "mozilla/dom/ContentParent.h"
+ #include "mozilla/dom/NuwaParent.h"
+ #include "mozilla/dom/PBlobParent.h"
+ #include "mozilla/dom/MessagePortParent.h"
+ #include "mozilla/dom/ServiceWorkerRegistrar.h"
+@@ -285,30 +287,36 @@ BackgroundParentImpl::DeallocPVsyncParen
+ }
+ 
+ camera::PCamerasParent*
+ BackgroundParentImpl::AllocPCamerasParent()
+ {
+   AssertIsInMainProcess();
+   AssertIsOnBackgroundThread();
+ 
++#ifdef MOZ_WEBRTC
+   nsRefPtr<mozilla::camera::CamerasParent> actor =
+       mozilla::camera::CamerasParent::Create();
+   return actor.forget().take();
++#else
++  return nullptr;
++#endif
+ }
+ 
+ bool
+ BackgroundParentImpl::DeallocPCamerasParent(camera::PCamerasParent *aActor)
+ {
+   AssertIsInMainProcess();
+   AssertIsOnBackgroundThread();
+   MOZ_ASSERT(aActor);
+ 
++#ifdef MOZ_WEBRTC
+   nsRefPtr<mozilla::camera::CamerasParent> actor =
+       dont_AddRef(static_cast<mozilla::camera::CamerasParent*>(aActor));
++#endif
+   return true;
+ }
+ 
+ namespace {
+ 
+ class InitUDPSocketParentCallback final : public nsRunnable
+ {
+ public:

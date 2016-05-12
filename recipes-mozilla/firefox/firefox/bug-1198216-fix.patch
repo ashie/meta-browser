@@ -1,0 +1,78 @@
+# HG changeset patch
+# User Ted Clancy <tclancy@mozilla.com>
+# Date 1440687439 25200
+#      Thu Aug 27 07:57:19 2015 -0700
+# Node ID a018736f68148ec8354581d165e32afeab593cd1
+# Parent  f8086bd3c84fc1a42c3625cf3cc2253f0a5e8cfd
+Bug 1198216 - Check for presence of ICU::Timezone::recreateDefault() before using. r=jwalden
+
+diff --git a/intl/icu-patches/bug-1172609-timezone-recreateDefault.diff b/intl/icu-patches/bug-1172609-timezone-recreateDefault.diff
+--- a/intl/icu-patches/bug-1172609-timezone-recreateDefault.diff
++++ b/intl/icu-patches/bug-1172609-timezone-recreateDefault.diff
+@@ -58,25 +58,26 @@ diff --git a/intl/icu/source/i18n/timezo
+          ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+      }
+  }
+  // -------------------------------------
+  
+ diff --git a/intl/icu/source/i18n/unicode/timezone.h b/intl/icu/source/i18n/unicode/timezone.h
+ --- a/intl/icu/source/i18n/unicode/timezone.h
+ +++ b/intl/icu/source/i18n/unicode/timezone.h
+-@@ -299,16 +299,18 @@ public:
++@@ -299,16 +299,19 @@ public:
+       * and made the default.
+       *
+       * @return   A default TimeZone. Clients are responsible for deleting the time zone
+       *           object returned.
+       * @stable ICU 2.0
+       */
+      static TimeZone* U_EXPORT2 createDefault(void);
+  
+++#define ICU_TZ_HAS_RECREATE_DEFAULT
+ +    static void U_EXPORT2 recreateDefault();
+ +
+      /**
+       * Sets the default time zone (i.e., what's returned by createDefault()) to be the
+       * specified time zone.  If NULL is specified for the time zone, the default time
+       * zone is set to the default host time zone.  This call adopts the TimeZone object
+       * passed in; the client is no longer responsible for deleting it.
+       *
+diff --git a/intl/icu/source/i18n/unicode/timezone.h b/intl/icu/source/i18n/unicode/timezone.h
+--- a/intl/icu/source/i18n/unicode/timezone.h
++++ b/intl/icu/source/i18n/unicode/timezone.h
+@@ -299,16 +299,17 @@ public:
+      * and made the default.
+      *
+      * @return   A default TimeZone. Clients are responsible for deleting the time zone
+      *           object returned.
+      * @stable ICU 2.0
+      */
+     static TimeZone* U_EXPORT2 createDefault(void);
+ 
++#define ICU_TZ_HAS_RECREATE_DEFAULT
+     static void U_EXPORT2 recreateDefault();
+ 
+     /**
+      * Sets the default time zone (i.e., what's returned by createDefault()) to be the
+      * specified time zone.  If NULL is specified for the time zone, the default time
+      * zone is set to the default host time zone.  This call adopts the TimeZone object
+      * passed in; the client is no longer responsible for deleting it.
+      *
+diff --git a/js/src/jsapi.cpp b/js/src/jsapi.cpp
+--- a/js/src/jsapi.cpp
++++ b/js/src/jsapi.cpp
+@@ -6253,13 +6253,13 @@ JS_PUBLIC_API(Zone*)
+ JS::GetObjectZone(JSObject* obj)
+ {
+     return obj->zone();
+ }
+ 
+ JS_PUBLIC_API(void)
+ JS::ResetTimeZone()
+ {
+-#if ENABLE_INTL_API
++#if ENABLE_INTL_API && defined(ICU_TZ_HAS_RECREATE_DEFAULT)
+     icu::TimeZone::recreateDefault();
+ #endif
+ }
+ 
