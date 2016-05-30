@@ -20,8 +20,6 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://wayland-patches/0003-Fixed-gdk_x11_get_server_time-for-wayland.patch \
            file://wayland-patches/0004-Install-popup_take_focus_filter-to-actual-GdkWindow.patch \
            file://wayland-patches/0005-Fixed-nsWindow-GetLastUserInputTime.patch \
-           file://wayland-patches/0006-Added-.mozconfig-build-file.patch \
-           file://wayland-patches/0007-Updated-Readme.txt-for-build-instructions.patch \
            file://mozconfig-45esr \
            "
 
