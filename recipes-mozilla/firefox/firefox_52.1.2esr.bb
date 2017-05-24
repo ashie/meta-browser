@@ -12,54 +12,56 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://mozilla-firefox.png \
            file://mozilla-firefox.desktop \
            file://vendor.js \
+           file://fix-python-path.patch \
+           file://fix-autoconf2.13-path.patch \
+           file://remove-needless-windows-dependency.patch \
+           file://fixes/Allow-.js-preference-files-to-set-locked-prefs-with-.patch \
            file://porting/Add-xptcall-support-for-SH4-processors.patch \
            file://porting/NSS-Fix-FTBFS-on-Hurd-because-of-MAXPATHLEN.patch \
-           file://porting/Disable-libyuv-assembly-on-mips64.patch \
-           file://porting/Make-powerpc-not-use-static-page-sizes-in-mozjemallo.patch \
            file://porting/NSS-GNU-kFreeBSD-support.patch \
-           file://fix-python-path.patch \
-           file://prefs/Set-DPI-to-system-settings.patch \
+           file://porting/Make-powerpc-not-use-static-page-sizes-in-mozjemallo.patch \
+           file://porting/Disable-libyuv-assembly-on-mips64.patch \
+           file://porting/Fix-CPU_ARCH-test-for-libjpeg-on-mips.patch \
+           file://porting/Fix-crashes-in-AtomicOperations-none-on-s390x.patch \
+           file://porting/Fix-broken-MIPS-build.patch \
+           file://porting/Work-around-Debian-bug-844357.patch \
            file://prefs/Set-javascript.options.showInConsole.patch \
+           file://prefs/Set-DPI-to-system-settings.patch \
            file://prefs/Don-t-auto-disable-extensions-in-system-directories.patch \
-           file://fixes/Bug-1178266-Link-against-libatomic-when-necessary.patch \
-           file://fixes/Bug-1245076-Don-t-include-mozalloc.h-from-the-cstdli.patch \
-           file://fixes/Allow-.js-preference-files-to-set-locked-prefs-with-.patch \
-           file://fixes/Fix-build-error-in-MIPS-SIMD-when-compiling-with-mfp.patch \
-           file://fixes/Bug-1259537-Unbreak-libc-build-after-bug-1245076.-r-.patch \
-           file://fixes/Bug-1257888-Link-chromium-mutex-based-atomics-implem.patch \
-           file://fixes/Bug-1239866-Remove-signaling-standalone-tests.-r-bwc.patch \
-           file://fixes/Bug-1235107-Move-bookmarks.html-to-a-chrome-localize.patch \
-           file://debian-hacks/Add-a-2-minutes-timeout-on-xpcshell-tests.patch \
-           file://debian-hacks/Add-another-preferences-directory-for-applications-p.patch \
-           file://debian-hacks/Allow-unsigned-addons-in-usr-lib-share-mozilla-exten.patch \
-           file://debian-hacks/Work-around-binutils-assertion-on-mips.patch \
-           file://debian-hacks/Don-t-error-out-when-run-time-libsqlite-is-older-tha.patch \
-           file://debian-hacks/Use-a-variable-for-xulrunner-base-version-in-various.patch \
-           file://debian-hacks/Don-t-register-plugins-if-the-MOZILLA_DISABLE_PLUGIN.patch \
            file://debian-hacks/Avoid-wrong-sessionstore-data-to-keep-windows-out-of.patch \
-           file://Fix-firefox-install-dir.patch \
-           file://fixes/Correct-the-source-to-be-compatible-with-gcc6-by-pre.patch \
+           file://debian-hacks/Add-another-preferences-directory-for-applications-p.patch \
+           file://debian-hacks/Don-t-register-plugins-if-the-MOZILLA_DISABLE_PLUGIN.patch \
+           file://debian-hacks/Use-a-variable-for-xulrunner-base-version-in-various.patch \
+           file://debian-hacks/Don-t-error-out-when-run-time-libsqlite-is-older-tha.patch \
+           file://debian-hacks/Add-a-2-minutes-timeout-on-xpcshell-tests.patch \
+           file://debian-hacks/Work-around-binutils-assertion-on-mips.patch \
+           file://debian-hacks/Don-t-build-image-gtests.patch \
+           file://debian-hacks/Allow-to-override-ICU_DATA_FILE-from-the-environment.patch \
+           file://debian-hacks/Force-use-the-i686-rust-target.patch \
+           file://debian-hacks/Set-program-name-from-the-remoting-name.patch \
+           file://debian-hacks/Build-against-system-libjsoncpp.patch \
+           file://debian-hacks/Use-the-Mozilla-Location-Service-key-when-the-Google.patch \
            file://0001-use-pkg-config-to-find-nss.patch \
            file://0002-use-pkg-config-to-find-nspr.patch \
            file://0003-do-not-link-against-crmf-library-it-is-not-there.patch \
            "
 
-SRC_URI[archive.md5sum] = "f4d83c5150fc5085db20d71862497eb8"
-SRC_URI[archive.sha256sum] = "2afb02029e115fae65dbe1d9c562cbfeb761a6807338bbd30dbffba616cb2d20"
+SRC_URI[archive.md5sum] = "e3913665423e4c4d60576d363124b89b"
+SRC_URI[archive.sha256sum] = "a7298f6a04a1330e39e560337c4560ec9b71567a0f758982dfa18d5a2a798a7c"
 
-S = "${WORKDIR}/firefox-45.9.0esr"
+S = "${WORKDIR}/firefox-${PV}"
 # MOZ_APP_BASE_VERSION should be incremented after a release
-MOZ_APP_BASE_VERSION = "45.9"
+MOZ_APP_BASE_VERSION = "52.1"
 
 inherit mozilla
 
+DISABLE_STATIC=""
 EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 
 ARM_INSTRUCTION_SET = "arm"
 
 CFLAGS +=" -fno-delete-null-pointer-checks -fno-lifetime-dse"
 CXXFLAGS +=" -fno-delete-null-pointer-checks -fno-lifetime-dse"
-TARGET_CC_ARCH += "${LDFLAGS}"
 
 do_install_append() {
     install -d ${D}${datadir}/applications
