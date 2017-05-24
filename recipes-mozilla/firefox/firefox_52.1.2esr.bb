@@ -46,8 +46,8 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://0003-do-not-link-against-crmf-library-it-is-not-there.patch \
            "
 
-SRC_URI[archive.md5sum] = "e3913665423e4c4d60576d363124b89b"
-SRC_URI[archive.sha256sum] = "a7298f6a04a1330e39e560337c4560ec9b71567a0f758982dfa18d5a2a798a7c"
+SRC_URI[archive.md5sum] = "cf3e1f554836056bbe6a6b78b61fe68a"
+SRC_URI[archive.sha256sum] = "388e0454d69801f0f2010f8f93b796420ec0493fbf138fc659dbd5b497b8373b"
 
 S = "${WORKDIR}/firefox-${PV}"
 # MOZ_APP_BASE_VERSION should be incremented after a release
