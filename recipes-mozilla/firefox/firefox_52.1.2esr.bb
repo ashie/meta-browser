@@ -60,9 +60,6 @@ EXTRA_OEMAKE += "installdir=${libdir}/${PN}"
 
 ARM_INSTRUCTION_SET = "arm"
 
-CFLAGS +=" -fno-delete-null-pointer-checks -fno-lifetime-dse"
-CXXFLAGS +=" -fno-delete-null-pointer-checks -fno-lifetime-dse"
-
 do_install_append() {
     install -d ${D}${datadir}/applications
     install -d ${D}${datadir}/pixmaps
