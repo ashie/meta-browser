@@ -13,7 +13,8 @@ SRC_URI = "https://archive.mozilla.org/pub/firefox/releases/${PV}/source/firefox
            file://mozilla-firefox.desktop \
            file://vendor.js \
            file://avoid-running-config-status.patch \
-           file://fix-autoconf2.13-path.patch \
+           file://add-js-src-old-configure.patch \
+           file://fake-autoconf2.13-path.patch \
            file://remove-needless-windows-dependency.patch \
            file://fixes/Allow-.js-preference-files-to-set-locked-prefs-with-.patch \
            file://porting/Add-xptcall-support-for-SH4-processors.patch \
