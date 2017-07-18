@@ -1,6 +1,15 @@
 diff -Nur firefox-52.1.2esr-bak/build/moz.configure/old.configure firefox-52.1.2esr/build/moz.configure/old.configure
 --- firefox-52.1.2esr-bak/build/moz.configure/old.configure	2017-04-11 11:13:08.000000000 +0900
-+++ firefox-52.1.2esr/build/moz.configure/old.configure	2017-07-18 17:03:46.154197182 +0900
++++ firefox-52.1.2esr/build/moz.configure/old.configure	2017-07-18 17:54:14.503385117 +0900
+@@ -31,7 +31,7 @@
+     autoconf = autoconf[0] if autoconf else None
+ 
+     for ac in (mozconfig_autoconf, autoconf, 'autoconf-2.13', 'autoconf2.13',
+-               'autoconf213'):
++               'autoconf213', 'true'):
+         if ac:
+             autoconf = find_program(ac)
+             if autoconf:
 @@ -77,8 +77,8 @@
      # as $0, and backslashes there breaks autoconf's detection of the source
      # directory.
@@ -22,7 +31,7 @@ diff -Nur firefox-52.1.2esr-bak/build/moz.configure/old.configure firefox-52.1.2
          log.info('Refreshing %s with %s', old_configure, autoconf)
 diff -Nur firefox-52.1.2esr-bak/js/src/old-configure firefox-52.1.2esr/js/src/old-configure
 --- firefox-52.1.2esr-bak/js/src/old-configure	1970-01-01 09:00:00.000000000 +0900
-+++ firefox-52.1.2esr/js/src/old-configure	2017-07-18 16:47:09.186197182 +0900
++++ firefox-52.1.2esr/js/src/old-configure	2017-07-18 17:54:09.447385117 +0900
 @@ -0,0 +1,10943 @@
 +#! /bin/sh
 +
