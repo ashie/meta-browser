@@ -57,6 +57,7 @@ PACKAGECONFIG[canvas-gpu] = ",,,"
 PACKAGECONFIG[stylo] = "--enable-stylo,--disable-stylo,,"
 PACKAGECONFIG[webrtc] = "--enable-webrtc,--disable-webrtc,,"
 
+# Additional upstream patches to improve wayland patches
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland', \
            ' \
             file://wayland/bug1468670-enable-alt-modifier-on-wayland.patch \
@@ -73,9 +74,7 @@ SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland', \
            ', \
            '', d)}"
 
-# Gecko Embedded's Additional wayland patches to support EGL
-# On RZ/G1, two or more EGL window is not supported.
-# Thus, e10s should be disabled when EGL is enabled.
+# Additional patches to support EGL on wayland
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland egl', \
            ' \
             file://wayland/egl/bug1460603-GLLibraryEGL-Use-wl_display-to-get-EGLDisplay-on-Way.patch \
@@ -99,6 +98,7 @@ SRC_URI += "${@bb.utils.contains_any('PACKAGECONFIG', 'glx egl', \
             file://fixes/suppress-multiple-compositors.patch \
 	   ', '', d)}"
 
+# Additional upstream patches to support OpenMAX IL
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'openmax', \
            ' \
             file://openmax/0001-Add-initial-implementation-of-PureOmxPlatformLayer.patch \
