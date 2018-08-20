@@ -56,6 +56,7 @@ PACKAGECONFIG[webgl] = ",,,"
 PACKAGECONFIG[canvas-gpu] = ",,,"
 PACKAGECONFIG[stylo] = "--enable-stylo,--disable-stylo,,"
 PACKAGECONFIG[webrtc] = "--enable-webrtc,--disable-webrtc,,"
+PACKAGECONFIG[disable-e10s] = ",,,"
 
 # Additional upstream patches to improve wayland patches
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland', \
@@ -84,7 +85,6 @@ SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland egl', \
             file://wayland/egl/0001-GLLibraryLoader-Use-given-symbol-lookup-function-fir.patch \
             file://wayland/egl/0002-Disable-query-EGL_EXTENSIONS.patch \
             file://wayland/egl/0001-Mark-GLFeature-framebuffer_multisample-as-unsupporte.patch \
-            file://prefs/disable-e10s.js \
            ', \
            '', d)}"
 
@@ -110,6 +110,9 @@ SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'webgl', \
 
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'canvas-gpu', \
            'file://prefs/canvas-gpu.js', '', d)}"
+
+SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'disable-e10s', \
+           'file://prefs/disable-e10s.js', '', d)}"
 
 python do_check_variables() {
     if bb.utils.contains('PACKAGECONFIG', 'glx egl', True, False, d):
@@ -173,7 +176,7 @@ do_install_append() {
     if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'canvas-gpu', '1', '', d)}" ]; then
         install -m 0644 ${WORKDIR}/prefs/canvas-gpu.js ${D}${libdir}/${PN}/defaults/pref/
     fi
-    if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'wayland egl', '1', '', d)}" ]; then
+    if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'disable-e10s', '1', '', d)}" ]; then
         install -m 0644 ${WORKDIR}/prefs/disable-e10s.js ${D}${libdir}/${PN}/defaults/pref/
     fi
 
