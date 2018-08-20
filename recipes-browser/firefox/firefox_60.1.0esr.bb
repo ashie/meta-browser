@@ -57,6 +57,7 @@ PACKAGECONFIG[canvas-gpu] = ",,,"
 PACKAGECONFIG[stylo] = "--enable-stylo,--disable-stylo,,"
 PACKAGECONFIG[webrtc] = "--enable-webrtc,--disable-webrtc,,"
 PACKAGECONFIG[disable-e10s] = ",,,"
+PACKAGECONFIG[forbit-multiple-compositors] = ",,,"
 
 # Additional upstream patches to improve wayland patches
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland', \
@@ -92,8 +93,6 @@ SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'wayland egl', \
 SRC_URI += "${@bb.utils.contains_any('PACKAGECONFIG', 'glx egl', \
            '\
             file://prefs/gpu.js \
-            file://prefs/single-compositor.js \
-            file://fixes/suppress-multiple-compositors.patch \
 	   ', '', d)}"
 
 # Additional upstream patches to support OpenMAX IL
@@ -113,6 +112,11 @@ SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'canvas-gpu', \
 
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'disable-e10s', \
            'file://prefs/disable-e10s.js', '', d)}"
+
+SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'forbit-multiple-compositors', \
+            file://prefs/single-compositor.js \
+            file://fixes/suppress-multiple-compositors.patch \
+	   ', '', d)}"
 
 python do_check_variables() {
     if bb.utils.contains('PACKAGECONFIG', 'glx egl', True, False, d):
@@ -165,7 +169,6 @@ do_install_append() {
     install -m 0644 ${WORKDIR}/prefs/autoconfig.cfg ${D}${libdir}/${PN}/
     if [ -n "${@bb.utils.contains_any('PACKAGECONFIG', 'glx egl', '1', '', d)}" ]; then
         install -m 0644 ${WORKDIR}/prefs/gpu.js ${D}${libdir}/${PN}/defaults/pref/
-        install -m 0644 ${WORKDIR}/prefs/single-compositor.js ${D}${libdir}/${PN}/defaults/pref/
     fi
     if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'openmax', '1', '', d)}" ]; then
         install -m 0644 ${WORKDIR}/prefs/openmax.js ${D}${libdir}/${PN}/defaults/pref/
@@ -178,6 +181,9 @@ do_install_append() {
     fi
     if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'disable-e10s', '1', '', d)}" ]; then
         install -m 0644 ${WORKDIR}/prefs/disable-e10s.js ${D}${libdir}/${PN}/defaults/pref/
+    fi
+    if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'forbit-multiple-compositors', '1', '', d)}" ]; then
+        install -m 0644 ${WORKDIR}/prefs/single-compositor.js ${D}${libdir}/${PN}/defaults/pref/
     fi
 
     # Fix ownership of files
