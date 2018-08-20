@@ -137,10 +137,7 @@ do_configure() {
 
     export RUST_TARGET="${RUST_TARGET_SYS}"
 
-    # We still need to support Yocto 2.1.
-    # After migrating Yocto 2.4, it can be removed.
-    export FALLBACK_CONFIGURE_ARGS="${CONFIGURE_ARGS}"
-    ./mach configure ${PACKAGECONFIG_CONFARGS} ${FALLBACK_CONFIGURE_ARGS}
+    ./mach configure ${PACKAGECONFIG_CONFARGS} ${CONFIGURE_ARGS}
     cp ${WORKDIR}/gn-configs/*.json ${S}/media/webrtc/gn-configs/
     ./mach build-backend -b GnMozbuildWriter
 }
