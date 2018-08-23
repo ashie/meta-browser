@@ -16,17 +16,43 @@ SRC_URI = "https://ftp.mozilla.org/pub/firefox/releases/${PV}/source/${PN}-${PV}
            file://mozilla-firefox.png \
            file://mozilla-firefox.desktop \
            file://prefs/vendor.js \
-           file://prefs/autoconfig.js \
-           file://prefs/autoconfig.cfg \
            file://fixes/bug1433081-fix-with-gl-provider-option.patch \
-           file://fixes/bug1434526-Fix-a-build-error-of-Gecko-Profiler.patch \
            file://fixes/0001-Enable-to-specify-RUST_TARGET-via-enviroment-variabl.patch \
            file://fixes/0001-Add-generating-cflags-for-bindgen-mechanism.patch \
            file://fixes/0001-Add-a-preference-to-force-enable-touch-events-withou.patch \
            file://fixes/fix-get-cpu-feature-definition-conflict.patch \
            file://fixes/fix-camera-permission-dialg-doesnot-close.patch \
+           file://fixes/Allow-.js-preference-files-to-set-locked-prefs-with-.patch \
+           file://fixes/Bug-1463035-Remove-MOZ_SIGNAL_TRAMPOLINE.-r-darchons.patch \
+           file://fixes/Bug-1470701-Use-run-time-page-size-when-changing-map.patch \
+           file://fixes/Bug-1444834-MIPS-Stubout-MacroAssembler-speculationB.patch \
+           file://fixes/Bug-1144632-fix-big-endian-Skia-builds.-r-rhunt.patch \
            file://gn-configs/x64_False_arm64_linux.json \
            file://gn-configs/x64_False_arm_linux.json \
+           file://porting/Add-xptcall-support-for-SH4-processors.patch \
+           file://porting/NSS-Fix-FTBFS-on-Hurd-because-of-MAXPATHLEN.patch \
+           file://porting/Make-powerpc-not-use-static-page-sizes-in-mozjemallo.patch \
+           file://porting/Disable-libyuv-assembly-on-mips64.patch \
+           file://porting/Fix-CPU_ARCH-test-for-libjpeg-on-mips.patch \
+           file://porting/Work-around-Debian-bug-844357.patch \
+           file://porting/Bug-1444303-MIPS-Fix-build-failures-after-Bug-142558.patch \
+           file://porting/Add-struct-ucred-for-Linux-on-MIPS.patch \
+           file://prefs/Set-javascript.options.showInConsole.patch \
+           file://prefs/Set-DPI-to-system-settings.patch \
+           file://prefs/Don-t-auto-disable-extensions-in-system-directories.patch \
+           file://debian-hacks/Avoid-wrong-sessionstore-data-to-keep-windows-out-of.patch \
+           file://debian-hacks/Add-another-preferences-directory-for-applications-p.patch \
+           file://debian-hacks/Don-t-register-plugins-if-the-MOZILLA_DISABLE_PLUGIN.patch \
+           file://debian-hacks/Don-t-error-out-when-run-time-libsqlite-is-older-tha.patch \
+           file://debian-hacks/Add-a-2-minutes-timeout-on-xpcshell-tests.patch \
+           file://debian-hacks/Don-t-build-image-gtests.patch \
+           file://debian-hacks/Allow-to-override-ICU_DATA_FILE-from-the-environment.patch \
+           file://debian-hacks/Set-program-name-from-the-remoting-name.patch \
+           file://debian-hacks/Use-the-Mozilla-Location-Service-key-when-the-Google.patch \
+           file://debian-hacks/Attempt-to-fix-building-webrtc-on-non-x86.patch \
+           file://debian-hacks/Only-build-webrtc-neon-on-aarch64.patch \
+           file://debian-hacks/Avoid-using-vmrs-vmsr-on-armel.patch \
+           file://debian-hacks/Bug-1464766-Allow-to-relax-the-addon-signature-requi.patch \
            "
 
 SRC_URI[archive.md5sum] = "46deec3c581279f986a1abb2d42697ef"
