@@ -16,6 +16,7 @@ SRC_URI = "https://ftp.mozilla.org/pub/firefox/releases/${PV}/source/${PN}-${PV}
            file://mozilla-firefox.png \
            file://mozilla-firefox.desktop \
            file://prefs/vendor.js \
+           file://fixes/avoid-running-autoconf2.13.patch \
            file://fixes/link-with-libpangoft.patch \
            file://fixes/bug1433081-fix-with-gl-provider-option.patch \
            file://fixes/0001-Enable-to-specify-RUST_TARGET-via-enviroment-variabl.patch \
